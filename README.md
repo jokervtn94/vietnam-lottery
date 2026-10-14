@@ -1,9 +1,5 @@
 # Vietnam Lottery Data Fetcher — Maintained Edition
 
-> **Bản quản lý của Jokervtn94 — 14/10/2026.** Sao chép từ [aloha123890/vietnam-lottery](https://github.com/aloha123890/vietnam-lottery) tại commit `0e252a294eb835494a7beda489545ca60c1f2f9f` và điều chỉnh parser, kiểm định dữ liệu, CI. Xem [bản sửa chi tiết](docs/CHANGELOG_REPAIR_20261014.md) và [quy trình kiểm định](docs/DATA_INTEGRITY.md). Đây là công cụ thống kê lịch sử, không đảm bảo dự báo trúng xổ số.
-
-**Lưu ý về bản quyền:** README của nguồn chưa cung cấp giấy phép rõ ràng. Cần xác minh quyền tái phân phối trước khi sử dụng hoặc phát hành phần mềm ở phạm vi vượt quá quyền được chủ sở hữu nguồn cho phép.
-
 
 Công cụ tự động thu thập, xử lý và lưu trữ dữ liệu xổ số từ ba miền của Việt Nam (Bắc, Trung, Nam).
 
