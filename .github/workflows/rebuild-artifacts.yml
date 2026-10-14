@@ -10,7 +10,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: vietnam-lottery-rebuild-main
+  group: vietnam-lottery-write-main
   cancel-in-progress: false
 jobs:
   rebuild:

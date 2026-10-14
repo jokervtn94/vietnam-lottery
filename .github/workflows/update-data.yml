@@ -5,12 +5,17 @@ on:
     - cron: '45 9 * * *'  # XSMN 16:45 Vietnam
     - cron: '45 10 * * *' # XSMT 17:45 Vietnam
     - cron: '45 11 * * *' # XSMB 18:45 Vietnam
+    - cron: '15 14 * * *' # 21:15 Vietnam: catch up all 3 regions
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-data.yml' # one-time smoke run when configuration is deployed
 
 permissions:
   contents: write
 concurrency:
-  group: vietnam-lottery-update-main
+  group: vietnam-lottery-write-main
   cancel-in-progress: false
 jobs:
   update-data:
@@ -30,6 +35,8 @@ jobs:
       - name: Test without network
         run: python -m unittest discover -s tests -v
       - name: Fetch region for scheduled time
+        id: fetch
+        continue-on-error: true # persist any successfully fetched draws before reporting partial failure
         env:
           EVENT_SCHEDULE: ${{ github.event.schedule }}
         shell: bash
@@ -38,6 +45,7 @@ jobs:
             "45 9 * * *") REGION="MN" ;;
             "45 10 * * *") REGION="MT" ;;
             "45 11 * * *") REGION="MB" ;;
+            "15 14 * * *") REGION="" ;;
             "") REGION="" ;;
             *) echo "Unexpected schedule: $EVENT_SCHEDULE"; exit 1 ;;
           esac
@@ -62,3 +70,8 @@ jobs:
           fi
           git commit -m "Update lottery data $(date +'%Y-%m-%d')"
           git push origin HEAD:"${{ github.ref_name }}"
+      - name: Report incomplete fetching after persisting successful draws
+        if: steps.fetch.outcome == 'failure'
+        run: |
+          echo 'Fetching was incomplete. Successfully collected results were saved, but review logs and retry missed dates.'
+          exit 1

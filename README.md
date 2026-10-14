@@ -161,3 +161,9 @@ python tools/rebuild_artifacts.py
 - Ngày không có kết quả có thể là ngày nghỉ quay (ví dụ lịch Tết), không mặc định là lỗi nguồn.
 - Tệp Parquet/PNG là **dữ liệu dẫn xuất**, tạo lại bởi workflow `Rebuild derived Parquet and charts` hoặc lệnh trên, không phải nguồn xác minh kết quả.
 - Để đồng bộ Apps Script, ưu tiên dùng `data/xsmn-2-digits.csv`, `data/xsmt-2-digits.csv`, `data/xsmb-2-digits.csv`, kiểm tra trạng thái chất lượng nguồn và thời điểm cập nhật.
+
+## Tự động cập nhật kết quả hằng ngày
+
+GitHub Actions cập nhật XSMN lúc 16:45, XSMT lúc 17:45, XSMB lúc 18:45 và chạy đối soát bổ sung lúc 21:15 (giờ Việt Nam, các mốc dự kiến). Dữ liệu mới được lưu vào thư mục `data/` trên nhánh `main` dưới dạng CSV/JSON/Parquet và thống kê mô tả.
+
+**Chi tiết:** [Lịch và quy trình tự động lưu kết quả](docs/AUTO_UPDATE.md). Các ngày nguồn lỗi không tự biến thành số 00; nếu tải được một phần, kết quả hợp lệ vẫn được lưu và workflow báo cảnh báo lỗi ở cuối.

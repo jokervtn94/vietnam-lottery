@@ -72,7 +72,8 @@ class LotteryBase(ABC):
             self.generate_dataframes()
             logger.info(f"Successfully loaded existing data from {file_path}")
         except Exception as e:
-            logger.warning(f"Could not load existing data from {file_path}: {e}")
+            logger.error(f"Cannot load existing data from {file_path}: {e}")
+            raise RuntimeError(f"Historical data load failed; refusing to overwrite {file_path}") from e
 
     def dump(self) -> None:
         if not self._data:
@@ -218,7 +219,8 @@ class LotteryMultiProvinceBase(LotteryBase):
             self.generate_dataframes()
             logger.info(f"Successfully loaded existing data from {file_path}")
         except Exception as e:
-            logger.warning(f"Could not load existing data from {file_path}: {e}")
+            logger.error(f"Cannot load existing data from {file_path}: {e}")
+            raise RuntimeError(f"Historical data load failed; refusing to overwrite {file_path}") from e
 
     def dump(self) -> None:
         if not self._data:
@@ -308,6 +310,11 @@ class LotteryMultiProvinceBase(LotteryBase):
                     logger.info(f"Successfully processed data for {province} on {selected_date}")
                 except Exception as e:
                     logger.error(f"Error creating result for {province} on {selected_date}: {e}")
+                    return []  # Reject entire draw if any province fails validation.
+
+            if len(results) != len(provinces):
+                logger.error("Incomplete province result for %s", selected_date)
+                return []
 
             if results:
                 self._data[selected_date] = results
