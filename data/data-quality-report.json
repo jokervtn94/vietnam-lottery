@@ -1,0 +1,31 @@
+[
+  {
+    "region": "MB",
+    "file": "data/xsmb-2-digits.csv",
+    "rows": 429,
+    "date_min": "2025-08-08",
+    "date_max": "2026-10-14",
+    "issues": [],
+    "warnings": [
+      "XSMB prize3_3 == prize3_5 in EVERY row; legacy field mapping bug likely. Historical rows require independent re-fetch/verification."
+    ]
+  },
+  {
+    "region": "MN",
+    "file": "data/xsmn-2-digits.csv",
+    "rows": 1359,
+    "date_min": "2025-08-08",
+    "date_max": "2026-10-14",
+    "issues": [],
+    "warnings": []
+  },
+  {
+    "region": "MT",
+    "file": "data/xsmt-2-digits.csv",
+    "rows": 1046,
+    "date_min": "2025-08-08",
+    "date_max": "2026-10-14",
+    "issues": [],
+    "warnings": []
+  }
+]
