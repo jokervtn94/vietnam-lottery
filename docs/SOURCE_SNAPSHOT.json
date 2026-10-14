@@ -1,0 +1,159 @@
+{
+  "source_repository": "aloha123890/vietnam-lottery",
+  "source_commit": "0e252a294eb835494a7beda489545ca60c1f2f9f",
+  "copied_at": "2026-10-14",
+  "target": "jokervtn94/vietnam-lottery",
+  "source_text_files_kept_with_original_git_blob_sha": [
+    {
+      "path": "data/xsmb-2-digits.csv",
+      "sha": "d27650361ea7c7c7df2b42ca7489f0a0953fc044",
+      "bytes": 38615
+    },
+    {
+      "path": "data/xsmb-sparse.csv",
+      "sha": "5bc913fa19af7a7dd8478c8f1ae14a747eb62fe6",
+      "bytes": 90814
+    },
+    {
+      "path": "data/xsmb-sparse.json",
+      "sha": "41627fbdfe8130e78ef180f29243e121e66f33ef",
+      "bytes": 567998
+    },
+    {
+      "path": "data/xsmb.csv",
+      "sha": "14f560ebcbb04a3fc7a85ba170005d4194cedeb9",
+      "bytes": 61159
+    },
+    {
+      "path": "data/xsmb.json",
+      "sha": "a21f7429767d1abaf0ef6535497b7a88d00d73f7",
+      "bytes": 266407
+    },
+    {
+      "path": "data/xsmn-2-digits.csv",
+      "sha": "98b36b52efe8235cad8d0b8aadf72a0ec82a571b",
+      "bytes": 100914
+    },
+    {
+      "path": "data/xsmn-sparse.csv",
+      "sha": "9e29b638a73b198aaa8bcc70ab73a1f737a2ab00",
+      "bytes": 301935
+    },
+    {
+      "path": "data/xsmn-sparse.json",
+      "sha": "5ee3011202e8613b196ffedec2626dccebce64e6",
+      "bytes": 573294
+    },
+    {
+      "path": "data/xsmn.csv",
+      "sha": "eb137f5e7eefc24af1433a7a074f4d154bdda079",
+      "bytes": 163132
+    },
+    {
+      "path": "data/xsmn.json",
+      "sha": "2516b5bee79989fd926f6312063c045b44957b5e",
+      "bytes": 620952
+    },
+    {
+      "path": "data/xsmt-2-digits.csv",
+      "sha": "9ffa771cbb8c2ad2a607b0ab1423d48af613c297",
+      "bytes": 78114
+    },
+    {
+      "path": "data/xsmt-sparse.csv",
+      "sha": "051fa01153eaa926c2384eef055ba4051e4799ae",
+      "bytes": 232882
+    },
+    {
+      "path": "data/xsmt-sparse.json",
+      "sha": "6cb02471708ddba07740a09a2e795095f8c48681",
+      "bytes": 573294
+    },
+    {
+      "path": "data/xsmt.csv",
+      "sha": "1daca1b75ac7b3c262b017b148d527f83f30eacd",
+      "bytes": 126044
+    },
+    {
+      "path": "data/xsmt.json",
+      "sha": "d29c877374510996edc1c3f941332aee94df297d",
+      "bytes": 478383
+    }
+  ],
+  "intentionally_not_copied": [
+    {
+      "path": "data/least_recent_numbers.png",
+      "source_sha": "35be4d32675506b332d44ea04c2d50ee089aea09",
+      "bytes": 111970,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/most_frequent_numbers.png",
+      "source_sha": "9c141c61d1769f9ddc916975d91e0f544000b0ff",
+      "bytes": 117579,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmb-2-digits.parquet",
+      "source_sha": "ca57a3baa38532d731d84c6a71f6ceb138b553ce",
+      "bytes": 40738,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmb-sparse.parquet",
+      "source_sha": "d61bbf49037e36e30566e19bd0d47622e723d678",
+      "bytes": 69212,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmb.parquet",
+      "source_sha": "d654964319bb256d00812ccd9db7baec0e48886e",
+      "bytes": 75471,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmn-2-digits.parquet",
+      "source_sha": "eaddfba8dcf3243c44f4db2a8d0c5baa39971df2",
+      "bytes": 45278,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmn-sparse.parquet",
+      "source_sha": "b6c2204b8eda9b9b9c28db56a4c006d83f81c091",
+      "bytes": 93210,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmn.parquet",
+      "source_sha": "dc623b1e27b485f82ad8522db0fe28e66f36cf14",
+      "bytes": 147913,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmt-2-digits.parquet",
+      "source_sha": "a3ecd2f62ede383fc6ed63931c80609e601ad286",
+      "bytes": 39880,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmt-sparse.parquet",
+      "source_sha": "e0c785db34d1cdaa0fd773dc514e4242331a240e",
+      "bytes": 84864,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    },
+    {
+      "path": "data/xsmt.parquet",
+      "source_sha": "0df1799fdc5a4226a62d1f628abf0ed5691c30dd",
+      "bytes": 117425,
+      "reconstruction": "Generated from preserved CSV after main deploy"
+    }
+  ],
+  "also_not_copied": [
+    "lottery.log"
+  ],
+  "notes": [
+    "Raw historic CSV and JSON have been retained, not corrected.",
+    "ZIP archive produced via GitHub source download or rebuilt-artifact workflow.",
+    "Upstream has no verified redistribution license; investigate before broad reuse."
+  ]
+}
