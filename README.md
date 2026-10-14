@@ -136,10 +136,10 @@ Mọi đóng góp đều được hoan nghênh. Vui lòng tạo issue hoặc pul
 Phần này cung cấp các phân tích về những con số xuất hiện thường xuyên nhất và những con số đã lâu không xuất hiện.
 
 ### Các số xuất hiện nhiều nhất theo từng vùng miền
-Biểu đồ theo miền (được tạo bởi GitHub Actions): [MB](data/mb-most-frequent.png) · [MN](data/mn-most-frequent.png) · [MT](data/mt-most-frequent.png)
+Biểu đồ theo miền (được tạo bởi GitHub Actions): ![MB](data/mb-most-frequent.png) · ![MN](data/mn-most-frequent.png) · ![MT](data/mt-most-frequent.png)
 
 ### Các số lâu rồi không xuất hiện theo từng vùng miền
-Biểu đồ theo miền (được tạo bởi GitHub Actions): [MB](data/mb-least-recent.png) · [MN](data/mn-least-recent.png) · [MT](data/mt-least-recent.png)
+Biểu đồ theo miền (được tạo bởi GitHub Actions): ![MB](data/mb-least-recent.png) · ![MN](data/mn-least-recent.png) · ![MT](data/mt-least-recent.png)
 
 ## Các lệnh bảo trì mới
 
