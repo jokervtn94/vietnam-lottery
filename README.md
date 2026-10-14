@@ -25,7 +25,7 @@ Công cụ tự động thu thập, xử lý và lưu trữ dữ liệu xổ s�
 1. Clone repository này về máy:
 
 ```bash
-git clone https://github.com/[username]/vietnam-lottery.git
+git clone https://github.com/jokervtn94/vietnam-lottery.git
 cd vietnam-lottery
 ```
 
