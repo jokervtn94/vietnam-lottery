@@ -1,0 +1,50 @@
+name: Rebuild derived Parquet and charts
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/*.csv'
+      - 'src/lottery_analyzer.py'
+      - 'tools/rebuild_artifacts.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: vietnam-lottery-rebuild-main
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m src.data_quality
+      - run: python tools/rebuild_artifacts.py
+      - run: python -m src.lottery_analyzer
+      - name: Publish derived artifacts only
+        shell: bash
+        run: |
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'
+          git add data/*.parquet data/*.png data/analysis-summary.json
+          if git diff --cached --quiet; then
+            echo 'Derived artifacts are current.'
+            exit 0
+          fi
+          git commit -m 'Regenerate lottery Parquet exports and charts'
+          git push origin HEAD:main
+      - name: Package repaired repository ZIP
+        run: zip -rq "$RUNNER_TEMP/vietnam-lottery-repaired.zip" . -x './.git/*'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vietnam-lottery-repaired-zip
+          path: ${{ runner.temp }}/vietnam-lottery-repaired.zip
+          retention-days: 30

@@ -1,0 +1,8 @@
+__pycache__/
+firebase-debug.log
+lottery.log
+.repair_backups/
+*.py[cod]
+.pytest_cache/
+.venv/
+.DS_Store
