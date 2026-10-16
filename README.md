@@ -117,7 +117,7 @@ vietnam-lottery/
 
 Dự án này tích hợp GitHub Actions để tự động thu thập và cập nhật dữ liệu xổ số hàng ngày.
 
-- **Lịch trình:** Workflow `update-data.yml` chạy ba lịch theo giờ Việt Nam: 16:45 XSMN, 17:45 XSMT, 18:45 XSMB.
+- **Lịch trình:** Workflow `update-data.yml` đặt lịch chính 16:45 XSMN, 17:45 XSMT, 18:45 XSMB; chạy lại lúc 17:25, 18:25, 19:25; đối soát 21:15, 22:25 và 08:25 sáng hôm sau (giờ Việt Nam). GitHub có thể kích hoạt trễ; mã thu thập giới hạn ngày theo giờ thực tế của từng miền.
 - **Kích hoạt thủ công:** Bạn cũng có thể kích hoạt workflow này thủ công thông qua giao diện GitHub Actions.
 - **Cách hoạt động:** Workflow sẽ checkout mã nguồn, cài đặt các thư viện, chạy script `src/fetch.py` để thu thập dữ liệu mới nhất, sau đó commit và push các thay đổi dữ liệu trở lại repository.
 
@@ -164,6 +164,6 @@ python tools/rebuild_artifacts.py
 
 ## Tự động cập nhật kết quả hằng ngày
 
-GitHub Actions cập nhật XSMN lúc 16:45, XSMT lúc 17:45, XSMB lúc 18:45 và chạy đối soát bổ sung lúc 21:15 (giờ Việt Nam, các mốc dự kiến). Dữ liệu mới được lưu vào thư mục `data/` trên nhánh `main` dưới dạng CSV/JSON/Parquet và thống kê mô tả.
+GitHub Actions đặt lịch chính 16:45 XSMN, 17:45 XSMT, 18:45 XSMB; các mốc dự phòng 17:25, 18:25, 19:25, 21:15, 22:25 và 08:25 sáng hôm sau (giờ Việt Nam). Do lịch `schedule` có thể trễ, mỗi lần chạy kiểm tra cả ba miền nhưng chỉ lấy đến ngày đã qua mốc công bố của miền tương ứng; không tải kết quả chưa quay khi cron chạy qua nửa đêm. Các mốc là **dự kiến**, không bảo đảm khởi chạy đúng phút. Dữ liệu hợp lệ được lưu vào `data/` trên nhánh `main` dưới dạng CSV/JSON/Parquet và thống kê mô tả.
 
 **Chi tiết:** [Lịch và quy trình tự động lưu kết quả](docs/AUTO_UPDATE.md). Các ngày nguồn lỗi không tự biến thành số 00; nếu tải được một phần, kết quả hợp lệ vẫn được lưu và workflow báo cảnh báo lỗi ở cuối.
