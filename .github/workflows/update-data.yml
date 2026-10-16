@@ -2,10 +2,16 @@ name: Update Vietnam Lottery Data
 
 on:
   schedule:
-    - cron: '45 9 * * *'  # XSMN 16:45 Vietnam
-    - cron: '45 10 * * *' # XSMT 17:45 Vietnam
-    - cron: '45 11 * * *' # XSMB 18:45 Vietnam
-    - cron: '15 14 * * *' # 21:15 Vietnam: catch up all 3 regions
+    # GitHub cron is UTC. These are intended Vietnam local times (UTC+7).
+    - cron: '45 9 * * *'   # 16:45 MN
+    - cron: '25 10 * * *'  # 17:25 MN retry
+    - cron: '45 10 * * *'  # 17:45 MT
+    - cron: '25 11 * * *'  # 18:25 MT retry
+    - cron: '45 11 * * *'  # 18:45 MB
+    - cron: '25 12 * * *'  # 19:25 MB retry
+    - cron: '15 14 * * *'  # 21:15 all-region catch-up
+    - cron: '25 15 * * *'  # 22:25 all-region retry
+    - cron: '25 1 * * *'   # 08:25 next-morning recovery for yesterday
   workflow_dispatch:
   push:
     branches: [main]
@@ -34,26 +40,32 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - name: Test without network
         run: python -m unittest discover -s tests -v
-      - name: Fetch region for scheduled time
+      - name: Fetch regions eligible by actual Vietnam local time
         id: fetch
-        continue-on-error: true # persist any successfully fetched draws before reporting partial failure
+        continue-on-error: true # persist successful draws, then report any failures
         env:
           EVENT_SCHEDULE: ${{ github.event.schedule }}
         shell: bash
         run: |
-          case "$EVENT_SCHEDULE" in
-            "45 9 * * *") REGION="MN" ;;
-            "45 10 * * *") REGION="MT" ;;
-            "45 11 * * *") REGION="MB" ;;
-            "15 14 * * *") REGION="" ;;
-            "") REGION="" ;;
-            *) echo "Unexpected schedule: $EVENT_SCHEDULE"; exit 1 ;;
-          esac
-          if [[ -z "$REGION" ]]; then
-            python -m src.fetch
-          else
-            python -m src.fetch --region "$REGION"
-          fi
+          # A scheduled run can be delayed by hours and start after midnight.
+          # Do not fetch an unfinished new day's draw because an old cron fires late.
+          VN_HHMM="$(date +'%H%M')"
+          VN_TODAY="$(date +'%F')"
+          VN_YESTERDAY="$(date -d 'yesterday' +'%F')"
+          echo "Scheduled cron: ${EVENT_SCHEDULE:-manual/push}; Vietnam time: $(date '+%F %H:%M:%S %Z')"
+          FAILED=0
+          for entry in "MN:1645" "MT:1745" "MB:1845"; do
+            IFS=':' read -r REGION CUTOFF <<< "$entry"
+            END_DATE="$VN_YESTERDAY"
+            if (( 10#$VN_HHMM >= 10#$CUTOFF )); then
+              END_DATE="$VN_TODAY"
+            fi
+            echo "Fetching $REGION only through $END_DATE (cutoff $CUTOFF VN)"
+            if ! python -m src.fetch --region "$REGION" --end "$END_DATE"; then
+              FAILED=1
+            fi
+          done
+          exit "$FAILED"
       - name: Audit legacy results; fail only on structural errors
         run: python -m src.data_quality --output data/data-quality-report.json
       - name: Generate descriptive statistics
