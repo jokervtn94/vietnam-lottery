@@ -117,11 +117,9 @@ vietnam-lottery/
 
 Dự án này tích hợp GitHub Actions để tự động thu thập và cập nhật dữ liệu xổ số hàng ngày.
 
-- **Lịch trình:** Workflow `update-data.yml` đặt lịch chính 16:45 XSMN, 17:45 XSMT, 18:45 XSMB; chạy lại lúc 17:25, 18:25, 19:25; đối soát 21:15, 22:25 và 08:25 sáng hôm sau (giờ Việt Nam). GitHub có thể kích hoạt trễ; mã thu thập giới hạn ngày theo giờ thực tế của từng miền.
+- **Lịch trình:** Workflow `update-data.yml` đặt lịch chính 18:45 (giờ Việt Nam).
 - **Kích hoạt thủ công:** Bạn cũng có thể kích hoạt workflow này thủ công thông qua giao diện GitHub Actions.
 - **Cách hoạt động:** Workflow sẽ checkout mã nguồn, cài đặt các thư viện, chạy script `src/fetch.py` để thu thập dữ liệu mới nhất, sau đó commit và push các thay đổi dữ liệu trở lại repository.
-
-Workflow dùng `GITHUB_TOKEN` mặc định với quyền `contents: write`, cần bật quyền ghi trong thiết lập GitHub Actions của repo.
 
 ## Đóng góp
 
@@ -141,19 +139,6 @@ Biểu đồ theo miền (được tạo bởi GitHub Actions): ![MB](data/mb-mo
 ### Các số lâu rồi không xuất hiện theo từng vùng miền
 Biểu đồ theo miền (được tạo bởi GitHub Actions): ![MB](data/mb-least-recent.png) · ![MN](data/mn-least-recent.png) · ![MT](data/mt-least-recent.png)
 
-## Các lệnh bảo trì mới
-
-```bash
-python -m unittest discover -s tests -v
-python -m src.data_quality
-python -m src.data_quality --strict
-python -m src.fetch --region MN
-python -m src.fetch --region MB --start 2026-10-13 --end 2026-10-13 --force
-python -m src.fetch --region MB --start 2026-02-16 --end 2026-02-19 --repair-gaps --allow-empty
-python -m src.lottery_analyzer --region MN --as-of 2026-10-13
-python tools/rebuild_artifacts.py
-```
-
 ### Tình trạng dữ liệu gốc
 
 - Sao chép nguyên bản CSV và JSON của ba miền, không tự động sửa các bản ghi cũ.
@@ -164,6 +149,6 @@ python tools/rebuild_artifacts.py
 
 ## Tự động cập nhật kết quả hằng ngày
 
-GitHub Actions đặt lịch chính 16:45 XSMN, 17:45 XSMT, 18:45 XSMB; các mốc dự phòng 17:25, 18:25, 19:25, 21:15, 22:25 và 08:25 sáng hôm sau (giờ Việt Nam). Do lịch `schedule` có thể trễ, mỗi lần chạy kiểm tra cả ba miền nhưng chỉ lấy đến ngày đã qua mốc công bố của miền tương ứng; không tải kết quả chưa quay khi cron chạy qua nửa đêm. Các mốc là **dự kiến**, không bảo đảm khởi chạy đúng phút. Dữ liệu hợp lệ được lưu vào `data/` trên nhánh `main` dưới dạng CSV/JSON/Parquet và thống kê mô tả.
+GitHub Actions đặt lịch chính 18:45 (giờ Việt Nam). Do lịch `schedule` có thể trễ, mỗi lần chạy kiểm tra cả ba miền nhưng chỉ lấy đến ngày đã qua mốc công bố của miền tương ứng; không tải kết quả chưa quay khi cron chạy qua nửa đêm. Các mốc là **dự kiến**, không bảo đảm khởi chạy đúng phút. Dữ liệu hợp lệ được lưu vào `data/` trên nhánh `main` dưới dạng CSV/JSON/Parquet và thống kê mô tả.
 
 **Chi tiết:** [Lịch và quy trình tự động lưu kết quả](docs/AUTO_UPDATE.md). Các ngày nguồn lỗi không tự biến thành số 00; nếu tải được một phần, kết quả hợp lệ vẫn được lưu và workflow báo cảnh báo lỗi ở cuối.
