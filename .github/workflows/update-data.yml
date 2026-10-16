@@ -3,15 +3,7 @@ name: Update Vietnam Lottery Data
 on:
   schedule:
     # GitHub cron is UTC. These are intended Vietnam local times (UTC+7).
-    - cron: '45 9 * * *'   # 16:45 MN
-    - cron: '25 10 * * *'  # 17:25 MN retry
-    - cron: '45 10 * * *'  # 17:45 MT
-    - cron: '25 11 * * *'  # 18:25 MT retry
-    - cron: '45 11 * * *'  # 18:45 MB
-    - cron: '25 12 * * *'  # 19:25 MB retry
-    - cron: '15 14 * * *'  # 21:15 all-region catch-up
-    - cron: '25 15 * * *'  # 22:25 all-region retry
-    - cron: '25 1 * * *'   # 08:25 next-morning recovery for yesterday
+    - cron: 45 11 * * *  # 18:45 MB
   workflow_dispatch:
   push:
     branches: [main]
