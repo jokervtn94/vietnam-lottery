@@ -1,81 +1,146 @@
+
 name: Update Vietnam Lottery Data
 
 on:
+  # 11:45 UTC = 18:45 Vietnam (UTC+7)
   schedule:
-    # GitHub cron is UTC. These are intended Vietnam local times (UTC+7).
-    - cron: 45 11 * * *  # 18:45 MB
+    - cron: '45 11 * * *'
+
+  # Cho phép chạy thủ công khi cần
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/update-data.yml' # one-time smoke run when configuration is deployed
 
 permissions:
   contents: write
+
 concurrency:
   group: vietnam-lottery-write-main
   cancel-in-progress: false
+
 jobs:
   update-data:
+    name: Update Lottery Results
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
+
     env:
       TZ: Asia/Ho_Chi_Minh
+
     steps:
-      - uses: actions/checkout@v4
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           persist-credentials: true
-      - uses: actions/setup-python@v5
+
+      # 2. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           cache: pip
-      - run: python -m pip install -r requirements.txt
-      - name: Test without network
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      # 4. Run tests
+      - name: Run unit tests
         run: python -m unittest discover -s tests -v
-      - name: Fetch regions eligible by actual Vietnam local time
+
+      # 5. Fetch lottery data
+      - name: Fetch Vietnam lottery results
         id: fetch
-        continue-on-error: true # persist successful draws, then report any failures
-        env:
-          EVENT_SCHEDULE: ${{ github.event.schedule }}
         shell: bash
+        continue-on-error: true
         run: |
-          # A scheduled run can be delayed by hours and start after midnight.
-          # Do not fetch an unfinished new day's draw because an old cron fires late.
+          set -uo pipefail
+
+          echo "======================================"
+          echo "VIETNAM LOTTERY AUTO UPDATE"
+          echo "======================================"
+          echo "Local time: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+          echo "Workflow event: ${{ github.event_name }}"
+
           VN_HHMM="$(date +'%H%M')"
           VN_TODAY="$(date +'%F')"
           VN_YESTERDAY="$(date -d 'yesterday' +'%F')"
-          echo "Scheduled cron: ${EVENT_SCHEDULE:-manual/push}; Vietnam time: $(date '+%F %H:%M:%S %Z')"
+
           FAILED=0
+
+          # MN: 16:45
+          # MT: 17:45
+          # MB: 18:45
           for entry in "MN:1645" "MT:1745" "MB:1845"; do
+
             IFS=':' read -r REGION CUTOFF <<< "$entry"
+
             END_DATE="$VN_YESTERDAY"
+
             if (( 10#$VN_HHMM >= 10#$CUTOFF )); then
               END_DATE="$VN_TODAY"
             fi
-            echo "Fetching $REGION only through $END_DATE (cutoff $CUTOFF VN)"
-            if ! python -m src.fetch --region "$REGION" --end "$END_DATE"; then
+
+            echo "--------------------------------------"
+            echo "Region: $REGION"
+            echo "End date: $END_DATE"
+            echo "--------------------------------------"
+
+            if python -m src.fetch \
+              --region "$REGION" \
+              --end "$END_DATE"; then
+
+              echo "Fetch completed: $REGION"
+
+            else
+
+              echo "::warning::Fetch failed: $REGION"
               FAILED=1
+
             fi
+
           done
+
           exit "$FAILED"
-      - name: Audit legacy results; fail only on structural errors
-        run: python -m src.data_quality --output data/data-quality-report.json
-      - name: Generate descriptive statistics
+
+      # 6. Audit data quality
+      - name: Validate lottery data
+        run: |
+          python -m src.data_quality \
+            --output data/data-quality-report.json
+
+      # 7. Generate statistics
+      - name: Generate lottery statistics
         run: python -m src.lottery_analyzer
-      - name: Commit only changed data
+
+      # 8. Commit updated data
+      - name: Commit and push updated data
         shell: bash
         run: |
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git config user.name 'github-actions[bot]'
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add data/
+
           if git diff --cached --quiet; then
-            echo 'No new data to commit.'
+            echo "No new lottery data to commit."
             exit 0
           fi
-          git commit -m "Update lottery data $(date +'%Y-%m-%d')"
-          git push origin HEAD:"${{ github.ref_name }}"
-      - name: Report incomplete fetching after persisting successful draws
+
+          git commit -m \
+            "Update lottery data $(date +'%Y-%m-%d')"
+
+          git push origin HEAD:main
+
+          echo "Lottery data successfully pushed."
+
+      # 9. Report fetching errors
+      - name: Report incomplete fetching
         if: steps.fetch.outcome == 'failure'
         run: |
-          echo 'Fetching was incomplete. Successfully collected results were saved, but review logs and retry missed dates.'
+          echo "::error::Lottery fetching was incomplete."
+          echo "Successfully collected data has been saved."
+          echo "Review logs and retry missing dates."
           exit 1
