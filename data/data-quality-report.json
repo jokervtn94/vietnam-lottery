@@ -2,27 +2,27 @@
   {
     "region": "MB",
     "file": "data/xsmb-2-digits.csv",
-    "rows": 433,
+    "rows": 434,
     "date_min": "2025-08-08",
-    "date_max": "2026-10-18",
+    "date_max": "2026-10-19",
     "issues": [],
     "warnings": []
   },
   {
     "region": "MN",
     "file": "data/xsmn-2-digits.csv",
-    "rows": 1372,
+    "rows": 1375,
     "date_min": "2025-08-08",
-    "date_max": "2026-10-18",
+    "date_max": "2026-10-19",
     "issues": [],
     "warnings": []
   },
   {
     "region": "MT",
     "file": "data/xsmt-2-digits.csv",
-    "rows": 1057,
+    "rows": 1059,
     "date_min": "2025-08-08",
-    "date_max": "2026-10-18",
+    "date_max": "2026-10-19",
     "issues": [],
     "warnings": []
   }
